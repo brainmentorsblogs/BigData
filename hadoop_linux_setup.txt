@@ -36,7 +36,7 @@ Command: source .bashrc
 
 ======================================================
 Configurations
-Command: cd hadoop-2.3.3/etc/hadoop/
+Command: cd hadoop-3.3.3/etc/hadoop/
 
 Open core-site.xml and edit the property
 Command: sudo nano core-site.xml
