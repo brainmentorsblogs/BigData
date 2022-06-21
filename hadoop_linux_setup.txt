@@ -4,101 +4,46 @@ Setting up a Single Node Hadoop Cluster
 Prerequisites to install Hadoop on Linux
 Add a Hadoop system user
 
-Command : sudo addgroup hadoop_
-Command : sudo adduser --ingroup hadoop_ hduser_
-======================================================
-Enter your password, name and other details
-NOTE: There is a possibility of a error in this setup and installation process.
-"hduser is not in the sudoers file. This incident will be reported."
+Pre-requisite
+- Java 8
 
-This error can be resolved by Login as a root user
-Command : su admin
-Command : sudo adduser hduser_ sudo
-======================================================
-Re-login as hduser_
-Command : su hduser_
-======================================================
-Configure SSH
-First, switch user, enter the following command
-Command : su - hduser_
-Command : ssh-keygen -t rsa -P ""
+1. sudo apt install openjdk-8-jdk
+2. sudo apt install openssh-server openssh-client -y
+3. sudo adduser hdp
+4. su - hdp
+5. ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
+6. cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+7. chmod 0600 ~/.ssh/authorized_keys
+8. ssh localhost
+9. wget hadoop_download_link
+10. tar -xvf hadoop-3.3.3.tar.gz
 
-Enable SSH access to local machine using this key.
+11. sudo nano ~/.bashrc
 
-Command : cat $HOME/.ssh/id_rsa.pub >> $HOME/.ssh/authorized_keys
-
-Now test SSH setup by connecting to localhost as 'hduser' user.
-
-Command : ssh localhost
-======================================================
-Note: if you see error in response to 'ssh localhost', then there is a possibility that SSH is not available on this system-
-
-To resolve this -
-Purge SSH using,
-Command : sudo apt-get purge openssh-server
-
-Install SSH using the command-
-Command : sudo apt-get install openssh-server
-======================================================
-
-1. Install Java
-- Java JDK Link to download
-https://www.oracle.com/java/technologies/javase-jdk8-downloads.html
-- extract java tar file
-Command 1: tar -xvf jdk-8u101-linux-i586.tar.gz
-Command 2: javac -version
-
-or install java using terminal
-Command 1: sudo apt update
-Command 2: sudo apt install openjdk-8-jdk openjdk-8-jre
-
-Verify 
-Command 3 : javac -version
-
-Setup JAVA_HOME and JRE_HOME
-Command 1 : sudo nano /etc/environment
-Command 2 : JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64"
-Command 3 : JRE_HOME="/usr/lib/jvm/java-8-openjdk-amd-64/jre" and exit
-Command 4 : source /etc/environment
-Command 5 : $echo $JAVA_HOME
+Paste these commands at bottom of the file
+export HADOOP_HOME=/home/hdp/hadoop-3.3.3
+export HADOOP_INSTALL=$HADOOP_HOME
+export HADOOP_MAPRED_HOME=$HADOOP_HOME
+export HADOOP_COMMON_HOME=$HADOOP_HOME
+export HADOOP_HDFS_HOME=$HADOOP_HOME
+export YARN_HOME=$HADOOP_HOME
+export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native
+export PATH=$PATH:$HADOOP_HOME/sbin:$HADOOP_HOME/bin
+export HADOOP_OPTS="-Djava.library.path=$HADOOP_HOME/lib/native"
 
 ======================================================
-2. Download Hadoop
-Command: wget - https://archive.apache.org/dist/hadoop/core/hadoop-2.7.3/hadoop-2.7.3.tar.gz
-Extract hadoop
-Command : tar -xvf hadoop-2.7.3.tar.gz
-======================================================
-3. Add the Hadoop and Java paths in the bash file (.bashrc)
-Command:  sudo gedit ~/.bashrc
-#Set HADOOP_HOME
-export HADOOP_HOME=<Installation Directory of Hadoop>
-
-#Set JAVA_HOME
-export JAVA_HOME=<Installation Directory of Java>
-
-# Add bin/ directory of Hadoop to PATH
-export PATH=$PATH:$HADOOP_HOME/bin
-
-ENTER THIS IN BASHRC
-==================================================
-export HADOOP_HOME=/home/ravi/Downloads/hadoop
-export PATH=$PATH:/home/ravi/Downloads/hadoop/bin
-
-export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
-export PATH=/usr/lib/jvm/java-8-openjdk-amd64/bin:$PATH
-
-======================================================
-4. Save the bash file and close it
+12. Save the bash file and close it
 For applying all these changes to the current Terminal, execute the source command.
 
 Command: source .bashrc
-Command: hadoop version
 
 ======================================================
-5. Configurations
-Command: cd hadoop-2.7.3/etc/hadoop/
+Configurations
+Command: cd hadoop-2.3.3/etc/hadoop/
+
 Open core-site.xml and edit the property
-Command: sudo gedit core-site.xml
+Command: sudo nano core-site.xml
+
 paste the xml code in file and save
 
 <configuration>
@@ -130,14 +75,17 @@ paste xml code and save this file.
 <value>false</value>
 </property>
 <property>
-<name>dfs.datanode.data.dir</name>
-<value>/home/hdusr_/hdfs</value>
+<name>dfs.data.dir</name>
+<value>/home/hdp/hdfs/namenode</value>
+</property>
+<property>
+<name>dfs.data.dir</name>
+<value>/home/hdp/hdfs/datanode</value>
 </property>
 </configuration>
 ======================================================
 
 Edit the mapred-site.xml file and edit the property
-Command (for hadoop version 2 only): cp mapred-site.xml.template mapred-site.xml
 Command: sudo gedit mapred-site.xml
 
 paste xml code and save this file.
@@ -177,18 +125,18 @@ paste xml code and save this file.
 
 Edit hadoop-env.sh and add the Java Path
 Command: sudo gedit hadoop–env.sh
-export JAVA_HOME = /home/admin/jdk1....
+export JAVA_HOME=/urs/lib/jvm/java-8-openjdk-amd64
 
 ======================================================
 6. Go to Hadoop home directory and format the NameNode.
 Command: cd
-Command: cd hadoop-2.7.3
+Command: cd hadoop-3.3.3
 Command: sudo bin/hadoop namenode -format
 
 ======================================================
 7. Testing
-Go to hadoop-2.7.3/sbin directory and start all the daemons
-Command: cd hadoop-2.7.3/sbin
+Go to hadoop-3.3.3/sbin directory and start all the daemons
+Command: cd hadoop-3.3.3/sbin
 Command: ./start-all.sh
 The above command is a combination of start-dfs.sh, start-yarn.sh & mr-jobhistory-daemon.sh
 ======================================================
