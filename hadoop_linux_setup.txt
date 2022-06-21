@@ -1,9 +1,6 @@
 Hadoop Installation Linux
 Setting up a Single Node Hadoop Cluster
 
-Prerequisites to install Hadoop on Linux
-Add a Hadoop system user
-
 Pre-requisite
 - Java 8
 
