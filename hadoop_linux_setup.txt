@@ -128,13 +128,13 @@ Command: sudo gedit hadoop–env.sh
 export JAVA_HOME=/urs/lib/jvm/java-8-openjdk-amd64
 
 ======================================================
-6. Go to Hadoop home directory and format the NameNode.
+Go to Hadoop home directory and format the NameNode.
 Command: cd
 Command: cd hadoop-3.3.3
 Command: sudo bin/hadoop namenode -format
 
 ======================================================
-7. Testing
+Testing
 Go to hadoop-3.3.3/sbin directory and start all the daemons
 Command: cd hadoop-3.3.3/sbin
 Command: ./start-all.sh
@@ -155,7 +155,7 @@ JobHistoryServer is responsible for servicing all job history related requests f
 
 Command: ./mr-jobhistory-daemon.sh start historyserver
 ======================================================
-8. To check that all the Hadoop services are up and running, run the below command.
+To check that all the Hadoop services are up and running, run the below command.
 Command: jps
 
 Open: http://localhost:8088
